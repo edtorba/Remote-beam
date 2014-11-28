@@ -14,13 +14,14 @@ window.onload = function() {
         }
 
         // Show requested frame
-        frame[id].style.display = 'block';
+        frames[id].style.display = 'block';
     };
     
     // Frame lookup object
     var frame = {
         'home': 0,
-        'host': 1
+        'host': 1,
+        'join': 2
     };
     
     // Buttons list
@@ -41,6 +42,9 @@ window.onload = function() {
     button.frameHomeHost.onclick = function() {
         // Generate code
         var code = randomCode(8, '#aA');
+        
+        // Place game code on the second frame
+        document.getElementById('frameHostCode').innerHTML = code;
         
         // Emit to app.js
         
