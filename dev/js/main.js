@@ -28,7 +28,8 @@ window.onload = function() {
     // Buttons list
     var button = {
         'frameHomeHost' : document.getElementById('frameHomeHost'),
-        'frameHomeJoin' : document.getElementById('frameHomeJoin')
+        'frameHomeJoin' : document.getElementById('frameHomeJoin'),
+        'frameJoinEnter' : document.getElementById('frameJoinEnter')
     };
     
     ///////////////////////////////////////////////////////////////////
@@ -82,6 +83,19 @@ window.onload = function() {
     ///////////////////////////////////////////////////////////////////
     
     // TODO: Submit game code and redirect to Game frame if correct
+    button.frameJoinEnter.onclick = function() {
+        // Get the code from the input field
+        var code = document.getElementById('frameJoinCode').value;
+        
+        if (code.length == 0) {
+            alert('Please enter code');
+            
+            return;
+        }
+        
+        // Emit to app.js
+        socket.emit('joinRoom', code);
+    };
     
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
