@@ -1,0 +1,21 @@
+$base__font--family: Lato, Helvetica Neue, Helvetica, Arial, sans-serif;
+$base__font--size: 14px;
+$base__font--color: #3b4855;
+$base__font--line-height: 1.9em;
+
+$base__link--color: #d15159;
+$base__link--font-color: #fff;
+$base__link--color-ascent: #dfE8ec;
+$base__link--font-color-ascent: $base__font--color;
+
+$base__background--color: #fff;
+$base__border--radius: 3px;
+
+$base__transition: all ease-in-out 0.2s;
+$base__transition--slow: all ease-in-out 0.6s;
+
+$base__selection--color: $base__link--color;
+$base__selection--font-color: #fff;
+
+$base__container--width: 1280px;
+$base__container--padding: 4.4em;
