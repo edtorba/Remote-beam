@@ -42,6 +42,7 @@ window.onload = function() {
     //////
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
+    
     button.frameHomeHost.onclick = function() {
         // Generate code
         var code = randomCode(8, '#aA');
@@ -83,7 +84,6 @@ window.onload = function() {
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
     
-    // TODO: Submit game code and redirect to Game frame if correct
     button.frameJoinEnter.onclick = function() {
         // Get the code from the input field
         var code = document.getElementById('frameJoinCode').value;
