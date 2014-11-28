@@ -1,6 +1,10 @@
 .frame-block {
-    display: block;
+    display: none;
     position: relative;
     top: 35%;
     text-align: center;
+    
+    &#frame-home {
+        display: block;
+    }
 }
