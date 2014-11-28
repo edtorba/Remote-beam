@@ -12,6 +12,14 @@ body {
     letter-spacing: 0;
 }
 
+.container {
+    display: block;
+    position: relative;
+    max-width: $base__container--width;
+    margin: 0 auto;
+    padding: $base__container--padding 0;
+}
+
 .row {
     padding-top: 2em;
 
