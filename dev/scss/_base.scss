@@ -1,0 +1,69 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: $base__background--color;
+    font-family: $base__font--family;
+    color: $base__font--color;
+    font-weight: 400;
+    font-size: $base__font--size;
+    line-height: $base__font--line-height;
+    letter-spacing: 0;
+}
+
+.row {
+    padding-top: 2em;
+
+    &:first-child {
+        padding-top: 0;
+    }
+}
+
+p {
+    padding-top: 1.65em;
+
+    &:first-child {
+        padding-top: 0;
+    }
+}
+
+a {
+    color: $base__link--color;
+    font-weight: 400;
+    text-decoration: none;
+    @include transition($base__transition);
+
+    &:hover,
+    &:focus {
+        color: $base__link--color-ascent;
+    }
+}
+
+@include selection() {
+    background: $base__selection--color;
+    color: $base__selection--font-color;
+}
+
+@include headings() {
+    font-weight: 700;
+    line-height: 1.2em;
+    color: $base__font--color;
+
+    & a {
+        font-weight: 700;
+        color: $base__font--color;
+    }
+
+    & a:hover,
+    & a:focus {
+        color: $base__link--color;
+    }
+}
+
+h1 { font-size: em($base__font--size + 13px); }
+h2 { font-size: em($base__font--size + 11px); }
+h3 { font-size: em($base__font--size + 9px); }
+h4 { font-size: em($base__font--size + 7px); }
+h5 { font-size: em($base__font--size + 5px); }
+h6 { font-size: em($base__font--size + 2px); }
