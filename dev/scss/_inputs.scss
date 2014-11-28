@@ -7,7 +7,7 @@ button {
     color: $base__link--font-color;
     font-weight: 700;
     font-size: em($base__font--size + 5px);
-    border: 0;
+    border: 3px solid transparent;
     @include border-radius($base__border--radius);
     @include transition($base__transition);
     @extend %border-box;
