@@ -48,6 +48,10 @@ a {
     }
 }
 
+small {
+    font-size: em($base__font--size / 2);   
+}
+
 @include selection() {
     background: $base__selection--color;
     color: $base__selection--font-color;
