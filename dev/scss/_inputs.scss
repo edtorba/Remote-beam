@@ -1,0 +1,43 @@
+button {
+    display: block;
+    background-color: $base__link--color;
+    width: 100%;
+    padding: 1em 2em;
+    margin-top: 1.65em;
+    color: $base__link--font-color;
+    font-weight: 700;
+    font-size: em($base__font--size + 5px);
+    border: 0;
+    @include border-radius($base__border--radius);
+    @include transition($base__transition);
+    @extend %border-box;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $base__link--color-ascent;
+        color: $base__link--font-color-ascent;
+    }
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+input {
+    display: block;
+    width: 100%;
+    padding: 1em 2em;
+    margin-top: 1.65em;
+    font-weight: 700;
+    font-size: em($base__font--size + 5px);
+    color: $base__font--color;
+    border: 3px solid;
+    border-color: $base__link--color-ascent;
+    @include border-radius($base__border--radius);
+    @include transition($base__transition);
+    @extend %border-box;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
