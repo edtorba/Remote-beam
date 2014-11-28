@@ -19,7 +19,8 @@ window.onload = function() {
     
     // Frame lookup object
     var frame = {
-        'home': 0
+        'home': 0,
+        'host': 1
     };
     
     // Buttons list
@@ -44,9 +45,22 @@ window.onload = function() {
         // Emit to app.js
         
         // Switch to host frame
+        switchToFrame(frame.host);
     };
     
     button.frameHomeJoin.onclick = function() {
           // Switch to join frame
     };
+    
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////
+    //////
+    //////
+    //////      Frame Host Events
+    //////
+    //////
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////
+    
+    // TODO: Wait for the second player and redirect to Game frame
 };
