@@ -18,16 +18,21 @@ io.on('connection', function(socket) {
     
     // Create room
     socket.on('joinRoom', function(code) {
-        console.log('Initialising a new room: ' + code);
+        console.log('Joining room: ' + code);
         
-        // Attach room name to a socket
-        socket.roomName = code;
+        if (numRoomClients(code) < 2) {
         
-        // Join room
-        socket.join(code);
-        
-        // Check number of clients in the game
-        console.log('Number of clients in the room: ' + numRoomClients(code));
+            // Attach room name to a socket
+            socket.roomName = code;
+
+            // Join room
+            socket.join(code);
+
+            // Check number of clients in the game
+            console.log('Number of clients in the room: ' + numRoomClients(code));
+        } else {
+            console.log('Only 2 clients can be in the room');   
+        }
     });
 });
 
