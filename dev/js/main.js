@@ -53,7 +53,8 @@ window.onload = function() {
     };
     
     button.frameHomeJoin.onclick = function() {
-          // Switch to join frame
+        // Switch to join frame
+        switchToFrame(frame.join);
     };
     
     ///////////////////////////////////////////////////////////////////
