@@ -3,12 +3,15 @@
     position: relative;
     top: 35%;
     text-align: center;
+    @extend %clearfix;
     
     &#frame-home {
-        display: block;
+        display: none;
     }
     
     &#frame-game {
-        top: 0;   
+        display: block;
+        top: 0;
+        height: 100%;
     }
 }
