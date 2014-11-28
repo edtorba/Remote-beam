@@ -22,13 +22,14 @@ window.onload = function() {
         'home': 0,
         'host': 1,
         'join': 2,
-        'game': 3
+        'dc'  : 3,
+        'game': 4
     };
     
     // Buttons list
     var button = {
-        'frameHomeHost' : document.getElementById('frameHomeHost'),
-        'frameHomeJoin' : document.getElementById('frameHomeJoin'),
+        'frameHomeHost'  : document.getElementById('frameHomeHost'),
+        'frameHomeJoin'  : document.getElementById('frameHomeJoin'),
         'frameJoinEnter' : document.getElementById('frameJoinEnter')
     };
     
@@ -110,6 +111,26 @@ window.onload = function() {
     socket.on('roomReady', function() {
         // Both players joined, switch to game frame
         switchToFrame(frame.game);
+    });
+    
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////
+    //////
+    //////
+    //////      One Player Disconnected
+    //////
+    //////
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////
+    
+    socket.on('opponentDisconnected', function() {
+        // TODO: Stop the game
+        
+        // Leave room
+        socket.emit('leaveRoom');
+        
+        // Switch to disconnected frame
+        switchToFrame(frame.dc);
     });
     
     ///////////////////////////////////////////////////////////////////

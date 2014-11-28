@@ -14,6 +14,13 @@ io.on('connection', function(socket) {
     
     socket.on('disconnect', function() {
         console.log('User disconnected: ' + socket.id);
+        
+        // Check if user was in a room
+        // if yes, disconnect other player
+        if (socket.roomName !== undefined) {
+            // Sending to all clients in room except sender
+            socket.broadcast.to(socket.roomName).emit('opponentDisconnected');
+        }
     });
     
     // Create room
@@ -36,8 +43,13 @@ io.on('connection', function(socket) {
             }
             console.log('Number of clients in the room: ' + numRoomClients(code));
         } else {
-            console.log('Only 2 clients can be in the room');   
+            console.log('Only 2 clients can be in the room');
         }
+    });
+    
+    // Leave room
+    socket.on('leaveRoom', function() {
+        socket.leave(socket.roomName);
     });
 });
 
