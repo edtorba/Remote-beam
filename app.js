@@ -29,6 +29,11 @@ io.on('connection', function(socket) {
             socket.join(code);
 
             // Check number of clients in the game
+            // if 2 clients start the game
+            if (numRoomClients(code) == 2) {
+                // Sending ready state to all clients in room, include sender
+                io.sockets.in(code).emit('roomReady');
+            }
             console.log('Number of clients in the room: ' + numRoomClients(code));
         } else {
             console.log('Only 2 clients can be in the room');   
