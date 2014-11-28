@@ -48,6 +48,7 @@ window.onload = function() {
         document.getElementById('frameHostCode').innerHTML = code;
         
         // Emit to app.js
+        socket.emit('joinRoom', code);
         
         // Switch to host frame
         switchToFrame(frame.host);
