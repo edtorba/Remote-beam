@@ -12,6 +12,9 @@ window.onload = function() {
         'enter' : 13
     };
     
+    // Round count
+    var round = -1;
+    
     // All frames
     var frames = document.querySelectorAll('.frame-block');
     
@@ -185,13 +188,21 @@ window.onload = function() {
         
         // Check if hitting keys is allowed
         if (keysFlag) {
+            console.log('FIRE!!!111');
             if (e.keyCode == key.space) {
                 // Emit to server / Shoot
-                socket.emit('gameShoot');
+                socket.emit('gameShoot', round);
+                
+                // Move to a next round
+                round++;
                 
                 // Change keysFlag back to false
                 keysFlag = !keysFlag;
             }
         }
     };
+    
+    socket.on('roundWinner', function(msg) {
+        alert(msg); 
+    });
 };

@@ -3,6 +3,9 @@ var app     = express();
 var http    = require('http').Server(app);
 var io      = require('socket.io')(http);
 
+var Games = require('./game.js');
+var games = new Games();
+
 app.use(express.static(__dirname + '/public'));
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
@@ -20,6 +23,9 @@ io.on('connection', function(socket) {
         if (socket.roomName !== undefined) {
             // Sending to all clients in room except sender
             socket.broadcast.to(socket.roomName).emit('opponentDisconnected');
+            
+            // Destroy game
+            games.destroyGame(socket.roomName);
         }
     });
     
@@ -34,6 +40,11 @@ io.on('connection', function(socket) {
 
             // Join room
             socket.join(code);
+            
+            // Init game
+            if (games.lookup[code] !== undefined) {
+                games.initGame(code);
+            }
 
             // Check number of clients in the game
             // if 2 clients start the game
@@ -54,8 +65,27 @@ io.on('connection', function(socket) {
     });
     
     // Client shooted
-    socket.on('gameShoot', function() {
-        // TODO: Track who was first send back results
+    socket.on('gameShoot', function(round) {
+        var winnerFlag = false;
+        
+        console.log('Shooting happened');
+        
+        // Check if there is a winner
+        if (!games.isThereAWinner(socket.roomName, round)) {
+            // No winner add a winner
+            games.addWinner(socket.roomName, socket.id);
+
+            console.log('this client won: ' + socket.id);
+
+            winnerFlag = !winnerFlag;
+
+            // Broadcast who's a winner
+
+            // Send to current request socket client
+            socket.emit('roundWinner', 'You won this round!');
+            // sending to all clients in room except sender
+            socket.broadcast.to(socket.roomName).emit('roundWinner', 'You lost this round!');
+        }
     });
 });
 
