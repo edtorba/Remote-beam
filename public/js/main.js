@@ -42,7 +42,8 @@ window.onload = function() {
     var button = {
         'frameHomeHost'  : document.getElementById('frameHomeHost'),
         'frameHomeJoin'  : document.getElementById('frameHomeJoin'),
-        'frameJoinEnter' : document.getElementById('frameJoinEnter')
+        'frameJoinEnter' : document.getElementById('frameJoinEnter'),
+        'frameDcGoHome'  : document.getElementById('frameDcGoHome')
     };
     
     ///////////////////////////////////////////////////////////////////
@@ -145,6 +146,11 @@ window.onload = function() {
         // Switch to disconnected frame
         switchToFrame(frame.dc);
     });
+    
+    button.frameDcGoHome.onclick = function() {
+        // Switch to home frame
+        switchToFrame(frame.home);
+    };
     
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
