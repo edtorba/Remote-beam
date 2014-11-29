@@ -212,5 +212,17 @@ window.onload = function() {
     socket.on('roundWinner', function(roundResult) {
         var message = document.getElementById('game__message'); 
         roundResult ? message.innerHTML = 'You Won!' : message.innerHTML = 'You Lost!';
+        
+        // Score
+        var lost = document.getElementById('player__top--score');
+        var won = document.getElementById('player__bottom--score');
+        
+        if (roundResult) {
+            won.dataset.duelsWon++;
+            won.innerHTML = 'Won ' + won.dataset.duelsWon + ' duels!';
+        } else {
+            lost.dataset.duelsLost++;
+            lost.innerHTML = 'Won ' + lost.dataset.duelsLost + ' duels!';
+        }
     });
 };
