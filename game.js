@@ -27,7 +27,6 @@ Games.prototype.addWinner = function(roomName, client) {
 Games.prototype.isThereAWinner = function(roomName, round) {
     // Find game
     if (this.lookup[roomName] !== undefined) {
-        console.log(this.games[this.lookup[roomName]].rounds.length == round ? true : false);
         return this.games[this.lookup[roomName]].rounds.length == round ? true : false;
     }
 };

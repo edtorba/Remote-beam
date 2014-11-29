@@ -4,7 +4,7 @@ window.onload = function() {
     'use strict';
     
     // Enable keys flag
-    var keysFlag = false;
+    var keysFlag;
     
     // Keys
     var key = {
@@ -159,12 +159,21 @@ window.onload = function() {
     // TODO: Frame game events
     socket.on('gameStart', function() {
         // Start countdown
-        var countdown = document.getElementById('game__countdown');
+        var messsage = document.getElementById('game__message');
+        var messageShoot = document.getElementById('game__messageShoot');
+        
+        // Lock keys
+        keysFlag = false;
+        
         var counter = 10;
         var timer = setInterval(function() {
             counter--;
             if (counter === 0) {
-                countdown.innerHTML = 'SHOOT!';
+                // Clear countdown
+                messsage.innerHTML = '';
+                
+                // Show shoot message
+                messageShoot.style.display = 'block';
                 
                 // Enable keys
                 keysFlag = !keysFlag;
@@ -172,13 +181,12 @@ window.onload = function() {
                 // Clear interval
                 clearInterval(timer);
                 
-                // Clear countdown
-                countdown.innerHTML = '';
-            } else {
-                countdown.innerHTML = counter;
+                // Hide shoot message
+                messageShoot.style.display = 'none';
+            } else if (counter < 5 && counter > 0) {
+                messsage.innerHTML = counter;
             }
         }, 1000);
-        
     });
     
     // Space bar listener
@@ -188,7 +196,6 @@ window.onload = function() {
         
         // Check if hitting keys is allowed
         if (keysFlag) {
-            console.log('FIRE!!!111');
             if (e.keyCode == key.space) {
                 // Emit to server / Shoot
                 socket.emit('gameShoot', round);
@@ -202,7 +209,8 @@ window.onload = function() {
         }
     };
     
-    socket.on('roundWinner', function(msg) {
-        alert(msg); 
+    socket.on('roundWinner', function(roundResult) {
+        var message = document.getElementById('game__message'); 
+        roundResult ? message.innerHTML = 'You Won!' : message.innerHTML = 'You Lost!';
     });
 };

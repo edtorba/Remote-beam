@@ -18,7 +18,17 @@
         }
     }
     
-    #game__countdown {
+    #game__message {
+        position: absolute;
+        top: 49%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        @include transition($base__transition);
+    }
+    
+    #game__messageShoot {
+        display: none;
         position: absolute;
         top: 49%;
         left: 0;

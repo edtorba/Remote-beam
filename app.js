@@ -68,23 +68,21 @@ io.on('connection', function(socket) {
     socket.on('gameShoot', function(round) {
         var winnerFlag = false;
         
-        console.log('Shooting happened');
-        
         // Check if there is a winner
         if (!games.isThereAWinner(socket.roomName, round)) {
             // No winner add a winner
             games.addWinner(socket.roomName, socket.id);
-
-            console.log('this client won: ' + socket.id);
 
             winnerFlag = !winnerFlag;
 
             // Broadcast who's a winner
 
             // Send to current request socket client
-            socket.emit('roundWinner', 'You won this round!');
+            socket.emit('roundWinner', true);
+            
             // sending to all clients in room except sender
-            socket.broadcast.to(socket.roomName).emit('roundWinner', 'You lost this round!');
+            socket.broadcast.to(socket.roomName).emit('roundWinner', false);
+            io.sockets.in(socket.roomName).emit('gameStart');
         }
     });
 });
