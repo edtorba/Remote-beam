@@ -6,11 +6,10 @@
     @extend %clearfix;
     
     &#frame-home {
-        display: none;
+        display: block;
     }
     
     &#frame-game {
-        display: block;
         top: 0;
         height: 100%;
     }

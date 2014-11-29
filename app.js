@@ -40,6 +40,7 @@ io.on('connection', function(socket) {
             if (numRoomClients(code) == 2) {
                 // Sending ready state to all clients in room, include sender
                 io.sockets.in(code).emit('roomReady');
+                io.sockets.in(code).emit('gameStart');
             }
             console.log('Number of clients in the room: ' + numRoomClients(code));
         } else {
@@ -50,6 +51,11 @@ io.on('connection', function(socket) {
     // Leave room
     socket.on('leaveRoom', function() {
         socket.leave(socket.roomName);
+    });
+    
+    // Client shooted
+    socket.on('gameShoot', function() {
+        // TODO:
     });
 });
 

@@ -24,5 +24,6 @@
         left: 0;
         right: 0;
         margin: 0 auto;
+        @include transition($base__transition);
     }
 }

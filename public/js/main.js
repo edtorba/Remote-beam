@@ -3,6 +3,9 @@ var socket = io();
 window.onload = function() {
     'use strict';
     
+    // Enable keys flag
+    var keysFlag = false;
+    
     // All frames
     var frames = document.querySelectorAll('.frame-block');
     
@@ -111,6 +114,7 @@ window.onload = function() {
     socket.on('roomReady', function() {
         // Both players joined, switch to game frame
         switchToFrame(frame.game);
+        
     });
     
     ///////////////////////////////////////////////////////////////////
@@ -144,4 +148,44 @@ window.onload = function() {
     ///////////////////////////////////////////////////////////////////
     
     // TODO: Frame game events
+    socket.on('gameStart', function() {
+        // Start countdown
+        var countdown = document.getElementById('game__countdown');
+        var counter = 10;
+        var timer = setInterval(function() {
+            counter--;
+            if (counter === 0) {
+                countdown.innerHTML = 'SHOOT!';
+                
+                // Enable keys
+                keysFlag = !keysFlag;
+            } else if (counter === -1) {
+                // Clear interval
+                clearInterval(timer);
+                
+                // Clear countdown
+                countdown.innerHTML = '';
+            } else {
+                countdown.innerHTML = counter;
+            }
+        }, 1000);
+        
+    });
+    
+    // Space bar listener
+    document.onkeyup = function(e) {
+        'use strict';
+        e = e || window.event;
+        
+        // Check if hitting keys is allowed
+        if (keysFlag) {
+            if (e.keyCode == key.space) {
+                // Emit to server / Shoot
+                socket.emit('gameShoot');
+                
+                // Change keysFlag back to false
+                keysFlag = !keysFlag;
+            }
+        }
+    };
 };
