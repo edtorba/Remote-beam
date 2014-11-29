@@ -6,6 +6,12 @@ window.onload = function() {
     // Enable keys flag
     var keysFlag = false;
     
+    // Keys
+    var key = {
+        'space' : 32,
+        'enter' : 13
+    };
+    
     // All frames
     var frames = document.querySelectorAll('.frame-block');
     

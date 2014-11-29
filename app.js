@@ -55,7 +55,7 @@ io.on('connection', function(socket) {
     
     // Client shooted
     socket.on('gameShoot', function() {
-        // TODO:
+        // TODO: Track who was first send back results
     });
 });
 
