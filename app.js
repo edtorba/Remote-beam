@@ -103,5 +103,5 @@ var numRoomClients = function(roomName, namespace) {
 }
 
 function randomTimer() {
-    return Math.floor(Math.random() * (1000 - 300)) + 300;
+    return Math.floor(Math.random() * (1000 - 100)) + 100;
 };
