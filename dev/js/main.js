@@ -212,7 +212,7 @@ window.onload = function() {
             } else if (counter < 5 && counter > 0) {
                 messages.message.innerHTML = counter;
             }
-        }, 1000);
+        }, Math.floor(Math.random() * (1000 - 500)) + 500);
     });
     
     // Space bar listener
