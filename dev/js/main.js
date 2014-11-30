@@ -13,7 +13,7 @@ window.onload = function() {
     };
     
     // Round count
-    var round = -1;
+    var round = 0;
     
     // Timer
     var timer;
@@ -190,6 +190,9 @@ window.onload = function() {
         // Lock keys
         keysFlag = false;
         
+        // New round
+        round++;
+        
         // Start countdown
         var counter = 10;
         timer = setInterval(function() {
@@ -225,9 +228,6 @@ window.onload = function() {
             if (e.keyCode == key.space) {
                 // Emit to server / Shoot
                 socket.emit('gameShoot', round);
-                
-                // Move to a next round
-                round++;
                 
                 // Change keysFlag back to false
                 keysFlag = !keysFlag;

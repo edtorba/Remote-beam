@@ -4,7 +4,7 @@ function Games() {
     this.lookup = new Object();
 };
 
-Games.prototype.initGame = function() {
+Games.prototype.initGame = function(roomName) {
     // Init new game
     var game = new Game(roomName);
     
@@ -12,33 +12,34 @@ Games.prototype.initGame = function() {
     this.games.push(game);
     
     // Refresh lookup object
-    this.looukpRefresh();
+    this.lookupRefresh();
 };
 
 Games.prototype.addWinner = function(roomName, client) {
     // Add winner
-    this.games[this.lookup[roomName]].addWinner(client);
-    console.log('Room: ' + roomName + ' Winner: ' + client);
+    if (typeof this.lookup[roomName] !== undefined) {
+        this.games[this.lookup[roomName]].addWinner(client);
+    }
 };
 
 Games.prototype.isThereAWinner = function(roomName, round) {
     // Find game
-    if (this.lookup[roomName] !== undefined) {
+    if (typeof this.lookup[roomName] !== undefined) {
         return this.games[this.lookup[roomName]].rounds.length == round ? true : false;
     }
 };
 
 Games.prototype.destroyGame = function(roomName) {
     // Check if game exists
-    if (this.lookup[roomName] !== undefined) {
+    if (typeof this.lookup[roomName] !== undefined) {
         this.games.splice(this.lookup[roomName], 1);
         
         // Refresh lookup object
-        this.looukpRefresh();
+        this.lookupRefresh();
     }
 };
 
-Games.prototype.looukpRefresh = function() {
+Games.prototype.lookupRefresh = function() {
     this.lookup = new Object();
     
     for(var i = 0; i < this.games.length; i++) {

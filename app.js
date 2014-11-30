@@ -20,7 +20,7 @@ io.on('connection', function(socket) {
         
         // Check if user was in a room
         // if yes, disconnect other player
-        if (socket.roomName !== undefined) {
+        if (typeof socket.roomName !== undefined) {
             // Sending to all clients in room except sender
             socket.broadcast.to(socket.roomName).emit('opponentDisconnected');
             
@@ -34,7 +34,6 @@ io.on('connection', function(socket) {
         console.log('Joining room: ' + code);
         
         if (numRoomClients(code) < 2) {
-        
             // Attach room name to a socket
             socket.roomName = code;
 
@@ -42,7 +41,7 @@ io.on('connection', function(socket) {
             socket.join(code);
             
             // Init game
-            if (games.lookup[code] !== undefined) {
+            if (typeof games.lookup[code] !== undefined) {
                 games.initGame(code);
             }
 
@@ -66,14 +65,10 @@ io.on('connection', function(socket) {
     
     // Client shooted
     socket.on('gameShoot', function(round) {
-        var winnerFlag = false;
-        
         // Check if there is a winner
         if (!games.isThereAWinner(socket.roomName, round)) {
             // Add a winner
             games.addWinner(socket.roomName, socket.id);
-
-            winnerFlag = !winnerFlag;
 
             // Broadcast who's a winner
 
