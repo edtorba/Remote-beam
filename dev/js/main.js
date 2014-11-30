@@ -15,19 +15,11 @@ window.onload = function() {
     // Round count
     var round = -1;
     
+    // Timer
+    var timer;
+    
     // All frames
     var frames = document.querySelectorAll('.frame-block');
-    
-    // Switch to frame function
-    function switchToFrame(id) {
-        // Hide all frames
-        for(var i = 0; i < frames.length; i++) {
-            frames[i].style.display = 'none';
-        }
-
-        // Show requested frame
-        frames[id].style.display = 'block';
-    };
     
     // Frame lookup object
     var frame = {
@@ -35,7 +27,16 @@ window.onload = function() {
         'host': 1,
         'join': 2,
         'dc'  : 3,
-        'game': 4
+        'game': 4,
+        'switchTo' : function(id) {
+            // Hide all frames
+            for(var i = 0; i < frames.length; i++) {
+                frames[i].style.display = 'none';
+            }
+
+            // Show requested frame
+            frames[id].style.display = 'block';
+        }
     };
     
     // Buttons list
@@ -44,6 +45,22 @@ window.onload = function() {
         'frameHomeJoin'  : document.getElementById('frameHomeJoin'),
         'frameJoinEnter' : document.getElementById('frameJoinEnter'),
         'frameDcGoHome'  : document.getElementById('frameDcGoHome')
+    };
+    
+    // Score
+    var score = {
+        'lost'   : document.getElementById('player__top--score'),
+        'won'    : document.getElementById('player__bottom--score'),
+        'update' : function() {
+            score.won.innerHTML = 'Won ' + score.won.dataset.duelsWon + ' duels!';
+            score.lost.innerHTML = 'Won ' + score.lost.dataset.duelsLost + ' duels!';
+        }
+    };
+    
+    // Message
+    var messages = {
+        'message' : document.getElementById('game__message'),
+        'shoot'   : document.getElementById('game__messageShoot')
     };
     
     ///////////////////////////////////////////////////////////////////
@@ -67,12 +84,12 @@ window.onload = function() {
         socket.emit('joinRoom', code);
         
         // Switch to host frame
-        switchToFrame(frame.host);
+        frame.switchTo(frame.host);
     };
     
     button.frameHomeJoin.onclick = function() {
         // Switch to join frame
-        switchToFrame(frame.join);
+        frame.switchTo(frame.join);
     };
     
     ///////////////////////////////////////////////////////////////////
@@ -123,8 +140,7 @@ window.onload = function() {
     
     socket.on('roomReady', function() {
         // Both players joined, switch to game frame
-        switchToFrame(frame.game);
-        
+        frame.switchTo(frame.game);
     });
     
     ///////////////////////////////////////////////////////////////////
@@ -138,18 +154,26 @@ window.onload = function() {
     ///////////////////////////////////////////////////////////////////
     
     socket.on('opponentDisconnected', function() {
-        // TODO: Stop the game
+        // Reset local attributes e.g. round counter etc.
+        clearInterval(timer);
+        keysFlag = false;
+        round = -1;
+        score.won.dataset.duelsWon = 0;
+        score.lost.dataset.duelsLost = 0;
+        score.update();
+        
+        messages.message.innerHTML = 'Getting Ready';
         
         // Leave room
         socket.emit('leaveRoom');
         
         // Switch to disconnected frame
-        switchToFrame(frame.dc);
+        frame.switchTo(frame.dc);
     });
     
     button.frameDcGoHome.onclick = function() {
         // Switch to home frame
-        switchToFrame(frame.home);
+        frame.switchTo(frame.home);
     };
     
     ///////////////////////////////////////////////////////////////////
@@ -162,24 +186,20 @@ window.onload = function() {
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
     
-    // TODO: Frame game events
     socket.on('gameStart', function() {
-        // Start countdown
-        var messsage = document.getElementById('game__message');
-        var messageShoot = document.getElementById('game__messageShoot');
-        
         // Lock keys
         keysFlag = false;
         
+        // Start countdown
         var counter = 10;
-        var timer = setInterval(function() {
+        timer = setInterval(function() {
             counter--;
             if (counter === 0) {
                 // Clear countdown
-                messsage.innerHTML = '';
+                messages.message.innerHTML = '';
                 
                 // Show shoot message
-                messageShoot.style.display = 'block';
+                messages.shoot.style.display = 'block';
                 
                 // Enable keys
                 keysFlag = !keysFlag;
@@ -188,9 +208,9 @@ window.onload = function() {
                 clearInterval(timer);
                 
                 // Hide shoot message
-                messageShoot.style.display = 'none';
+                messages.shoot.style.display = 'none';
             } else if (counter < 5 && counter > 0) {
-                messsage.innerHTML = counter;
+                messages.message.innerHTML = counter;
             }
         }, 1000);
     });
@@ -216,19 +236,10 @@ window.onload = function() {
     };
     
     socket.on('roundWinner', function(roundResult) {
-        var message = document.getElementById('game__message'); 
-        roundResult ? message.innerHTML = 'You Won!' : message.innerHTML = 'You Lost!';
+        roundResult ? messages.message.innerHTML = 'You Won!' : messages.message.innerHTML = 'You Lost!';
         
-        // Score
-        var lost = document.getElementById('player__top--score');
-        var won = document.getElementById('player__bottom--score');
+        roundResult ? score.won.dataset.duelsWon++ : score.lost.dataset.duelsLost++;
         
-        if (roundResult) {
-            won.dataset.duelsWon++;
-            won.innerHTML = 'Won ' + won.dataset.duelsWon + ' duels!';
-        } else {
-            lost.dataset.duelsLost++;
-            lost.innerHTML = 'Won ' + lost.dataset.duelsLost + ' duels!';
-        }
+        score.update();
     });
 };
