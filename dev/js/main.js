@@ -62,6 +62,13 @@ window.onload = function() {
         'message' : document.getElementById('game__message')
     };
     
+    // Input fields
+    var inputs = {
+        'playerWord' : document.getElementById('player__word')
+    };
+    
+    var word;
+    
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
     //////
@@ -160,6 +167,8 @@ window.onload = function() {
         score.won.dataset.duelsWon = 0;
         score.lost.dataset.duelsLost = 0;
         score.update();
+        inputs.playerWord.value = '';
+        inputs.playerWord.className = '';
         
         messages.message.innerHTML = 'Getting Ready';
         
@@ -185,12 +194,18 @@ window.onload = function() {
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
     
-    socket.on('gameStart', function(randomTimer) {
+    socket.on('gameStart', function(randomTimer, randomWord) {
+        // Word
+        word = randomWord;
+        
         // Lock keys
         keysFlag = false;
         
         // New round
         round++;
+        
+        // Remove classes
+        inputs.playerWord.className = '';
         
         // Start countdown
         var counter = 7;
@@ -202,7 +217,7 @@ window.onload = function() {
                 messages.message.innerHTML = counter;
             } else if (counter === 0) {
                 // Clear countdown
-                messages.message.innerHTML = '';
+                messages.message.innerHTML = randomWord;
                 
                 // Enable keys
                 keysFlag = !keysFlag;
@@ -213,27 +228,42 @@ window.onload = function() {
         }, randomTimer);
     });
     
-    // Space bar listener
+    // Enter button listener
     document.onkeyup = function(e) {
         'use strict';
         e = e || window.event;
         
-        // Check if hitting keys is allowed
+        // Check if keys are enabled
         if (keysFlag) {
-            if (e.keyCode == key.space) {
-                // Emit to server / Shoot
-                socket.emit('gameShoot', round);
-                
-                // Change keysFlag back to false
-                keysFlag = !keysFlag;
+            if (e.keyCode == key.enter) {
+                if (inputs.playerWord.value.trim().length > 0) {
+                    // Compare words
+                    if (word === inputs.playerWord.value) {
+                        // Remove classes
+                        inputs.playerWord.className = '';
+                        
+                        // Emit word to server
+                        socket.emit('gameShoot', round, inputs.playerWord.value);
+                        
+                        // Disable keys
+                        keysFlag = !keysFlag;
+                    } else {
+                        inputs.playerWord.className = 'player__word--error';
+                    }
+                }
             }
         }
     };
     
     socket.on('roundWinner', function(roundResult) {
+        // Show who won
         roundResult ? messages.message.innerHTML = 'You Won!' : messages.message.innerHTML = 'You Lost!';
         
+        // Increase score
         roundResult ? score.won.dataset.duelsWon++ : score.lost.dataset.duelsLost++;
+        
+        // Clear input field
+        inputs.playerWord.value = '';
         
         score.update();
     });

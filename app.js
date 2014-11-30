@@ -6,6 +6,9 @@ var io      = require('socket.io')(http);
 var Games = require('./modules/game.js');
 var games = new Games();
 
+var Words = require('./modules/words.js');
+var words = new Words();
+
 app.use(express.static(__dirname + '/public'));
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
@@ -50,7 +53,10 @@ io.on('connection', function(socket) {
             if (numRoomClients(code) == 2) {
                 // Sending ready state to all clients in room, include sender
                 io.sockets.in(code).emit('roomReady');
-                io.sockets.in(code).emit('gameStart', randomTimer());
+                
+                var tempWord = words.getRandomWord();
+                games.setWord(socket.roomName, tempWord);
+                io.sockets.in(code).emit('gameStart', randomTimer(), tempWord);
             }
             console.log('Number of clients in the room: ' + numRoomClients(code));
         } else {
@@ -64,22 +70,27 @@ io.on('connection', function(socket) {
     });
     
     // Client shooted
-    socket.on('gameShoot', function(round) {
+    socket.on('gameShoot', function(round, word) {
         // Check if there is a winner
         if (!games.isThereAWinner(socket.roomName, round)) {
-            // Add a winner
-            games.addWinner(socket.roomName, socket.id);
+            // Compare words
+            if (games.compareWords(socket.roomName, word)) {
+                // Add a winner
+                games.addWinner(socket.roomName, socket.id);
 
-            // Broadcast who's a winner
+                // Broadcast who's a winner
 
-            // Send to current request socket client
-            socket.emit('roundWinner', true);
-            
-            // sending to all clients in room except sender
-            socket.broadcast.to(socket.roomName).emit('roundWinner', false);
-            
-            // sending to all clients in room, include sender
-            io.sockets.in(socket.roomName).emit('gameStart', randomTimer());
+                // Send to current request socket client
+                socket.emit('roundWinner', true);
+
+                // sending to all clients in room except sender
+                socket.broadcast.to(socket.roomName).emit('roundWinner', false);
+
+                // sending to all clients in room, include sender
+                var tempWord = words.getRandomWord();
+                games.setWord(socket.roomName, tempWord);
+                io.sockets.in(socket.roomName).emit('gameStart', randomTimer(), tempWord);
+            }
         }
     });
 });

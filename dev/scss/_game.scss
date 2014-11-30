@@ -14,7 +14,7 @@
         }
         
         &#player__bottom {
-            bottom: 5em;
+            bottom: 10em;
         }
     }
     
@@ -49,12 +49,24 @@
         text-transform: uppercase;
         text-align: center;
         
-        &#player__bottom--score {
-            bottom: 1.5em;
-        }
-        
         &#player__top--score {
             top: 1.5em;
+        }
+        
+        &#player__bottom--score {
+            bottom: 5.5em;
+        }
+    }
+    
+    #player__word {
+        position: absolute;
+        bottom: 0;
+        margin: 0;
+        text-align: center;
+        outline: 0;
+        
+        &.player__word--error {
+            border-color: $base__link--color;
         }
     }
 }
