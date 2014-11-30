@@ -185,7 +185,8 @@ window.onload = function() {
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
     
-    socket.on('gameStart', function(randomTimer) {
+    socket.on('gameStart', function(randomTimer, randomWord) {
+        console.log(randomWord);
         // Lock keys
         keysFlag = false;
         

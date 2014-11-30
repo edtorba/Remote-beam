@@ -39,6 +39,20 @@ Games.prototype.destroyGame = function(roomName) {
     }
 };
 
+Games.prototype.setWord = function(roomName, word) {
+    // Find game
+    if (typeof this.lookup[roomName] !== undefined) {
+        this.games[this.lookup[roomName]].setWord(word);
+    }
+};
+
+Games.prototype.compareWords = function(roomName, word) {
+    // Find game
+    if (typeof this.lookup[roomName] !== undefined) {
+        return this.games[this.lookup[roomName]].getWord() == word ? true : false;
+    }
+};
+
 Games.prototype.lookupRefresh = function() {
     this.lookup = new Object();
     
@@ -52,9 +66,18 @@ module.exports = Games;
 // Game Class stores round results
 function Game(roomName) {
     this.roomName = roomName;
+    this.word = null;
     this.rounds = [];
 };
 
 Game.prototype.addWinner = function(client) {
     this.rounds.push(client);
+};
+
+Game.prototype.setWord = function(word) {
+    this.word = word;
+};
+
+Game.prototype.getWord = function() {
+    return this.word;
 };
