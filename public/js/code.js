@@ -1,17 +1,1 @@
-// Generates random alpha-numeric-string
-// http://stackoverflow.com/questions/10726909/random-alpha-numeric-string-in-javascript
-function randomCode(length, chars) {
-    var mask = '';
-    if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
-    if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (chars.indexOf('#') > -1) mask += '0123456789';
-    if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
-    var result = '';
-    for (var i = length; i > 0; --i) result += mask[Math.round(Math.random() * (mask.length - 1))];
-    return result;
-}
-
-// Example usage:
-// console.log(randomString(16, 'aA'));
-// console.log(randomString(32, '#aA'));
-// console.log(randomString(64, '#A!'));
+function randomCode(n,d){var r="";d.indexOf("a")>-1&&(r+="abcdefghijklmnopqrstuvwxyz"),d.indexOf("A")>-1&&(r+="ABCDEFGHIJKLMNOPQRSTUVWXYZ"),d.indexOf("#")>-1&&(r+="0123456789"),d.indexOf("!")>-1&&(r+="~`!@#$%^&*()_+-={}[]:\";'<>?,./|\\");for(var a="",e=n;e>0;--e)a+=r[Math.round(Math.random()*(r.length-1))];return a}
