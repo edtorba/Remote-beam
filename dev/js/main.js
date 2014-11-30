@@ -59,8 +59,7 @@ window.onload = function() {
     
     // Message
     var messages = {
-        'message' : document.getElementById('game__message'),
-        'shoot'   : document.getElementById('game__messageShoot')
+        'message' : document.getElementById('game__message')
     };
     
     ///////////////////////////////////////////////////////////////////
@@ -157,7 +156,7 @@ window.onload = function() {
         // Reset local attributes e.g. round counter etc.
         clearInterval(timer);
         keysFlag = false;
-        round = -1;
+        round = 0;
         score.won.dataset.duelsWon = 0;
         score.lost.dataset.duelsLost = 0;
         score.update();
@@ -194,26 +193,22 @@ window.onload = function() {
         round++;
         
         // Start countdown
-        var counter = 10;
+        var counter = 7;
         timer = setInterval(function() {
             counter--;
-            if (counter === 0) {
+            
+            if (counter < 5 && counter > 0) {
+                // Display countdown
+                messages.message.innerHTML = counter;
+            } else if (counter === 0) {
                 // Clear countdown
                 messages.message.innerHTML = '';
                 
-                // Show shoot message
-                messages.shoot.style.display = 'block';
-                
                 // Enable keys
                 keysFlag = !keysFlag;
-            } else if (counter === -1) {
+                
                 // Clear interval
                 clearInterval(timer);
-                
-                // Hide shoot message
-                messages.shoot.style.display = 'none';
-            } else if (counter < 5 && counter > 0) {
-                messages.message.innerHTML = counter;
             }
         }, randomTimer);
     });
