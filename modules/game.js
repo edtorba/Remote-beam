@@ -16,12 +16,9 @@ Games.prototype.initGame = function() {
 };
 
 Games.prototype.addWinner = function(roomName, client) {
-    // Find game
-    if (this.lookup[roomName] !== undefined) {
-        this.games[this.lookup[roomName]].addWinner(client);
-    } else {
-        console.log('Game does not exists');
-    }
+    // Add winner
+    this.games[this.lookup[roomName]].addWinner(client);
+    console.log('Room: ' + roomName + ' Winner: ' + client);
 };
 
 Games.prototype.isThereAWinner = function(roomName, round) {

@@ -51,7 +51,7 @@ io.on('connection', function(socket) {
             if (numRoomClients(code) == 2) {
                 // Sending ready state to all clients in room, include sender
                 io.sockets.in(code).emit('roomReady');
-                io.sockets.in(code).emit('gameStart');
+                io.sockets.in(code).emit('gameStart', randomTimer());
             }
             console.log('Number of clients in the room: ' + numRoomClients(code));
         } else {
@@ -70,7 +70,7 @@ io.on('connection', function(socket) {
         
         // Check if there is a winner
         if (!games.isThereAWinner(socket.roomName, round)) {
-            // No winner add a winner
+            // Add a winner
             games.addWinner(socket.roomName, socket.id);
 
             winnerFlag = !winnerFlag;
@@ -82,7 +82,9 @@ io.on('connection', function(socket) {
             
             // sending to all clients in room except sender
             socket.broadcast.to(socket.roomName).emit('roundWinner', false);
-            io.sockets.in(socket.roomName).emit('gameStart');
+            
+            // sending to all clients in room, include sender
+            io.sockets.in(socket.roomName).emit('gameStart', randomTimer());
         }
     });
 });
@@ -104,3 +106,7 @@ var numRoomClients = function(roomName, namespace) {
     
     return num;
 }
+
+function randomTimer() {
+    return Math.floor(Math.random() * (1000 - 500)) + 500;
+};

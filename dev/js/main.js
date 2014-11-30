@@ -186,7 +186,7 @@ window.onload = function() {
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
     
-    socket.on('gameStart', function() {
+    socket.on('gameStart', function(randomTimer) {
         // Lock keys
         keysFlag = false;
         
@@ -212,7 +212,7 @@ window.onload = function() {
             } else if (counter < 5 && counter > 0) {
                 messages.message.innerHTML = counter;
             }
-        }, Math.floor(Math.random() * (1000 - 500)) + 500);
+        }, randomTimer);
     });
     
     // Space bar listener
