@@ -1,6 +1,6 @@
 {
-  "name": "remote-beam",
-  "version": "0.0.2",
+  "name": "Remote Beam",
+  "version": "0.0.3",
   "description": "PvP game",
   "dependencies": {
     "express": "^4.10.4",
