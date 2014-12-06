@@ -3,8 +3,8 @@ var app     = express();
 var http    = require('http').Server(app);
 var io      = require('socket.io')(http);
 
-var Games = require('./modules/game.js');
-var games = new Games();
+var GamesList = require('./modules/gameslist.js');
+var gamesList = new GamesList();
 
 var Words = require('./modules/words.js');
 var words = new Words();
@@ -28,37 +28,36 @@ io.on('connection', function(socket) {
             socket.broadcast.to(socket.roomName).emit('opponentDisconnected');
             
             // Destroy game
-            games.destroyGame(socket.roomName);
+            gamesList.delete(socket.roomName);
         }
     });
     
     // Create room
-    socket.on('joinRoom', function(code) {
-        console.log('Joining room: ' + code);
+    socket.on('joinRoom', function(roomName) {
+        console.log('Joining room: ' + roomName);
         
-        if (numRoomClients(code) < 2) {
+        if (numberOfClientsInTheRoom(roomName) < 2) {
             // Attach room name to a socket
-            socket.roomName = code;
+            socket.roomName = roomName;
 
             // Join room
-            socket.join(code);
+            socket.join(roomName);
             
             // Init game
-            if (typeof games.lookup[code] !== undefined) {
-                games.initGame(code);
+            if (!gamesList.exists(roomName)) {
+                gamesList.init(roomName);
             }
 
             // Check number of clients in the game
             // if 2 clients start the game
-            if (numRoomClients(code) == 2) {
+            if (numberOfClientsInTheRoom(roomName) == 2) {
                 // Sending ready state to all clients in room, include sender
-                io.sockets.in(code).emit('roomReady');
+                io.sockets.in(roomName).emit('roomReady');
                 
-                var tempWord = words.getRandomWord();
-                games.setWord(socket.roomName, tempWord);
-                io.sockets.in(code).emit('gameStart', randomTimer(), tempWord);
+                // Start game
+                startGame(roomName);
             }
-            console.log('Number of clients in the room: ' + numRoomClients(code));
+            console.log('Number of clients in the room: ' + numberOfClientsInTheRoom(roomName));
         } else {
             console.log('Only 2 clients can be in the room');
         }
@@ -71,28 +70,36 @@ io.on('connection', function(socket) {
     
     // Client shooted
     socket.on('gameShoot', function(round, word) {
-        // Check if there is a winner
-        if (!games.isThereAWinner(socket.roomName, round)) {
-            // Compare words
-            if (games.compareWords(socket.roomName, word)) {
-                // Add a winner
-                games.addWinner(socket.roomName, socket.id);
 
-                // Broadcast who's a winner
-
-                // Send to current request socket client
+        // Check if there is a current round winner
+        if (!gamesList.isThereARoundWinner(socket.roomName, round)) {
+            
+            // Verify word
+            if (gamesList.compareWords(socket.roomName, word)) {
+                
+                // Add winner
+                gamesList.addRoundWinner(socket.roomName, socket.id);
+                
+                // Broadcast who's a round winner
+                // To winner
                 socket.emit('roundWinner', true);
-
-                // sending to all clients in room except sender
+                // To opponent
                 socket.broadcast.to(socket.roomName).emit('roundWinner', false);
-
-                // sending to all clients in room, include sender
-                var tempWord = words.getRandomWord();
-                games.setWord(socket.roomName, tempWord);
-                io.sockets.in(socket.roomName).emit('gameStart', randomTimer(), tempWord);
+                
+                // Start game
+                startGame(socket.roomName);
             }
         }
     });
+    
+    // Start game
+    function startGame(roomName) {
+        'use strict';
+        
+        var word = words.getWord();
+        gamesList.setWord(roomName, word);
+        io.sockets.in(roomName).emit('gameStart', randomInterval(), word);
+    };
 });
 
 http.listen(3000, function() {
@@ -100,8 +107,9 @@ http.listen(3000, function() {
 });
 
 
+// Returns number of clients in the specified room
 // http://stackoverflow.com/questions/24108833/node-js-socket-io-room-total-of-users
-var numRoomClients = function(roomName, namespace) {
+var numberOfClientsInTheRoom = function(roomName, namespace) {
     if (!namespace) namespace = '/';
     
     var room = io.nsps[namespace].adapter.rooms[roomName];
@@ -113,6 +121,7 @@ var numRoomClients = function(roomName, namespace) {
     return num;
 }
 
-function randomTimer() {
+// Returns random interval from 100ms to 1000ms
+function randomInterval() {
     return Math.floor(Math.random() * (1000 - 100)) + 100;
 };
