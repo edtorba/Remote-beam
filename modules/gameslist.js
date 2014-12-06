@@ -1,26 +1,26 @@
-// Rooms class - Storest list of rooms
-function Rooms() {
+// GamesList class - Storest list of games
+function GamesList() {
     'use strict';
     
     this.list = new Object();
 };
 
-// Initialises new room
-Rooms.prototype.init = function(roomName) {
+// Initialises new game
+GamesList.prototype.init = function(roomName) {
     'use strict';
     
     this.list[roomName] = new Game();
 };
 
-// Checks if room exists
-Rooms.prototype.exists = function(roomName) {
+// Checks if game exists
+GamesList.prototype.exists = function(roomName) {
     'use strict';
     
     return this.list.hasOwnProperty(roomName);
 };
 
-// Delete room
-Rooms.prototype.delete = function(roomName) {
+// Delete game
+GamesList.prototype.delete = function(roomName) {
     'use strict';
     
     if (this.exists(roomName)) {
@@ -31,7 +31,7 @@ Rooms.prototype.delete = function(roomName) {
 };
 
 // Add round winner
-Rooms.prototype.addRoundWinner = function(roomName, client) {
+GamesList.prototype.addRoundWinner = function(roomName, client) {
     'use strict';
     
     if (this.exists(roomName)) {
@@ -42,7 +42,7 @@ Rooms.prototype.addRoundWinner = function(roomName, client) {
 };
 
 // Checks if there is a round winner
-Rooms.prototype.isThereARoundWinner = function(roomName, round) {
+GamesList.prototype.isThereARoundWinner = function(roomName, round) {
     'use strict';
     
     if (this.exists(roomName)) {
@@ -53,7 +53,7 @@ Rooms.prototype.isThereARoundWinner = function(roomName, round) {
 };
 
 // Sets the round word
-Rooms.prototype.setWord = function(roomName, word) {
+GamesList.prototype.setWord = function(roomName, word) {
     'use strict';
     
     if (this.exists(roomName)) {
@@ -64,7 +64,7 @@ Rooms.prototype.setWord = function(roomName, word) {
 };
 
 // Verifies words 
-Rooms.prototype.compareWords = function(roomName, word) {
+GamesList.prototype.compareWords = function(roomName, word) {
     'use strict';
     
     if (this.exists(roomName)) {
@@ -74,7 +74,7 @@ Rooms.prototype.compareWords = function(roomName, word) {
     }
 };
 
-module.exports = Rooms;
+module.exports = GamesList;
 
 // Game class - Stores game data
 function Game() {
