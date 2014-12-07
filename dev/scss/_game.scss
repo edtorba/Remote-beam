@@ -9,11 +9,11 @@
         height: 50px;
         background-color: tomato;
         
-        &#player__top {
+        &#player--top {
             top: 5em;
         }
         
-        &#player__bottom {
+        &#player--bottom {
             bottom: 10em;
         }
     }
@@ -24,17 +24,6 @@
         left: 0;
         right: 0;
         margin: 0 auto;
-        @include transition($base__transition);
-    }
-    
-    #game__messageShoot {
-        display: none;
-        position: absolute;
-        top: 49%;
-        left: 0;
-        right: 0;
-        margin: 0 auto;
-        background-color: $base__background--color;
         @include transition($base__transition);
     }
     
@@ -49,11 +38,11 @@
         text-transform: uppercase;
         text-align: center;
         
-        &#player__top--score {
+        &#player--top-score {
             top: 1.5em;
         }
         
-        &#player__bottom--score {
+        &#player--bottom-score {
             bottom: 5.5em;
         }
     }
